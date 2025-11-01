@@ -27,12 +27,12 @@ export default defineConfig([
   },
   {
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-unsafe-argument': 'warn',
-      'no-console': ['warn', { allow: ['warn', 'error', 'debug'] }],
-      'prettier/prettier': ['error', { endOfLine: 'auto' }],
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'prettier/prettier': ['warn', { endOfLine: 'auto' }],
     },
   },
 ]);
