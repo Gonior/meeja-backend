@@ -1,98 +1,227 @@
+<h1 align="center">Meeja (Trello/Notion Style)</h1>
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  A modular, scalable backend system built with <b>NestJS Monorepo</b> architecture.  
+  Designed for multi-tenant workspace collaboration (like Trello or Notion).
 </p>
+---
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![NestJS](https://img.shields.io/badge/NestJS-Framework-red)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Features
 
-## Description
+- 🧩 **Modular architecture** (Workspace, Board, Note, Me)
+- 🗄️ **Drizzle ORM** with PostgreSQL
+- 🔐 **JWT Authentication** with refresh tokens
+- 📦 **DTO-based validation** with `class-validator`
+- 🧠 **Domain-driven design** (service → repository → entity)
+- 🧰 **Shared Core utilities** (guards, decorators, interceptors)
+- 🧾 **Swagger API Docs** auto-generated
+- 🧱 **Scalable foundation** for future microservices
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 🏗️ Project Structure
 
-```bash
-$ pnpm install
+```
+root-project/
+│  src/
+│  ├── app.module.ts
+│  ├── main.ts
+│  ├── config/
+│  │   ├── database.config.ts
+│  │   ├── redis.config.ts
+│  │   └── rabbitmq.config.ts
+│  ├── common/
+│  │   ├── decorators/
+│  │   ├── filters/
+│  │   ├── guards/
+│  │   ├── interceptors/
+│  │   ├── dto/
+│  │   └── utils/
+│  ├── core/
+│  │   ├── database/
+│  │   │   ├── prisma.service.ts
+│  │   │   └── prisma.module.ts
+│  │   ├── cache/
+│  │   └── queue/
+│  ├── modules/
+│  │   ├── auth/
+│  │   ├── user/
+│  │   ├── board/
+│  │   ├── task/
+│  │   └── comment/
+│  └── shared/
+│  │   └── entities/
+└── README.md
+└── package.json
+
 ```
 
-## Compile and run the project
+> 📘 For detailed conventions:
+>
+> - [Route Design Guide](./docs/routes-design.md)
+> - [Structure & Naming Guide](./docs/structure-guideline.md)
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer           | Technology        |
+| --------------- | ----------------- |
+| Framework       | NestJS            |
+| Database ORM    | Drizzle           |
+| Database        | PostgreSQL        |
+| Auth            | JWT + Passport    |
+| Validation      | class-validator   |
+| Docs            | Swagger / OpenAPI |
+| Runtime         | Node.js (v20+)    |
+| Queue           | RabbitMq          |
+| Package Manager | pnpm              |
+
+---
+
+## 🚦 Getting Started
+
+### 1️⃣ Clone the project
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+git clone https://github.com/<yourname>/<yourproject>.git
+cd <yourproject>
 ```
 
-## Run tests
+### 2️⃣ Install dependencies
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm install
 ```
 
-## Deployment
+### 3️⃣ Setup environment variables
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Create `.env` in root:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+```env
+
+DATABASE_URL="postgresql://user:password@localhost:5432/workspace_db"
+JWT_SECRET="supersecretkey"
+PORT=3000
+```
+
+4️⃣ Setup database
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+
+pnpm run db:migrate
+
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+5️⃣ Run the API
 
-## Resources
+```bash
+pnpm start:dev
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+API Docs available at: 👉 http://localhost:3000/api/docs
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+🧱 Core Modules
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| Module    | Description                              |
+| --------- | ---------------------------------------- |
+| Auth      | Handles registration, login, and JWT     |
+| Workspace | CRUD for workspaces & members            |
+| Board     | Boards within a workspace                |
+| Note      | Notes within a board                     |
+| Me        | Personal endpoints (/me, /me/workspaces) |
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+🧭 Route Overview
 
-## License
+| Method | Path                   | Description             |
+| ------ | ---------------------- | ----------------------- | --- |
+| POST   | /auth/register         | Register new user       |
+| GET    | /me                    | Get profile             |     |
+| GET    | /me/workspaces         | Get user workspaces     |
+| POST   | /workspaces            | Create workspace        |
+| GET    | /workspaces/:id/boards | Get boards in workspace |
+| POST   | /boards/:id/notes      | Create note in board    |
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+> 📜 Full route design: see docs/routes-design.md
+
+---
+
+🧰 Development Tools
+
+| Tool              | Purpose               |
+| ----------------- | --------------------- |
+| Swagger           | API documentation     |
+| Bruno             | API testing           |
+| ESLint + Prettier | Code quality          |
+| Husky             | Pre-commit checks     |
+| Docker Compose    | Local dev environment |
+
+---
+
+🧩 Scripts
+
+Command Description
+
+```bash
+pnpm start:dev	#Run NestJS in dev mode
+pnpm prisma studio	#Open Prisma DB browser
+pnpm lint	#Run linter
+pnpm test	#Run unit tests
+```
+
+---
+
+🧠 Project Philosophy
+
+> “Code is read more often than it is written.”
+> So we focus on clarity, consistency, and domain separation.
+
+Guiding principles:
+
+Clean, modular architecture
+
+Separation of domain logic
+
+Avoid circular dependencies
+
+Explicit boundaries between layers
+
+Controller = I/O boundary, Service = business logic, Repository = data access
+
+---
+
+🧑‍💻 Contributors
+
+Name Role
+
+Dedi Cahya Backend Developer
+
+---
+
+📜 License
+
+MIT License © 2025 Dedi C.
+
+---
+
+## 📘 2. Penjelasan Per Bagian
+
+| Bagian                    | Tujuan                                                               |
+| ------------------------- | -------------------------------------------------------------------- |
+| **Header**                | Nama & deskripsi singkat project (kasih konteks instan buat pembaca) |
+| **Features**              | Ringkas tapi powerful — kasih kesan “production-ready”               |
+| **Project Structure**     | Visual overview buat bantu developer baru orientasi                  |
+| **Tech Stack**            | Ngasih snapshot semua dependency utama                               |
+| **Getting Started**       | Harus _langsung jalan tanpa mikir_ (copy-paste friendly)             |
+| **Modules / Routes**      | Biar orang ngerti sistem domain kamu                                 |
+| **Philosophy**            | Nunjukin kamu ngerti prinsip arsitektur, bukan cuma koding           |
+| **License / Contributor** | Bikin project kamu keliatan open & profesional                       |
+
+---
