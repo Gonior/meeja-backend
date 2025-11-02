@@ -1,3 +1,9 @@
 ignoredBuiltDependencies:
   - '@nestjs/core'
+  - esbuild
   - unrs-resolver
+
+onlyBuiltDependencies:
+  - '@scarf/scarf'
+  - argon2
+  - sharp

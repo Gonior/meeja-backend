@@ -1,22 +1,13 @@
-🔥 Wah… itu rencana yang **serius keren** dan **production-grade** banget 👏
-
-Jawaban singkatnya:
-👉 **YA**, ERD kamu sekarang **sudah sangat siap** untuk diterjemahkan ke struktur kode — baik di sisi **database**, **service**, maupun **event-driven architecture**.
-
-Karena kamu mau pakai NestJS dengan **monorepo**, PostgreSQL, Redis, dan RabbitMQ di dalam Docker, kamu sudah berada di jalur arsitektur backend modern ⚡
-
----
-
 ## 🧭 Step-by-step Roadmap Translasi dari ERD ke Codebase
 
 ### 1. 🧱 **Setup Infrastructure (Docker)**
 
 Kamu bisa mulai dengan `docker-compose.yml` yang menjalankan:
 
-* `app` → NestJS (API utama)
-* `db` → PostgreSQL
-* `redis` → caching, rate limiting, pub/sub opsional
-* `rabbitmq` → message broker untuk event-driven architecture
+- `app` → NestJS (API utama)
+- `db` → PostgreSQL
+- `redis` → caching, rate limiting, pub/sub opsional
+- `rabbitmq` → message broker untuk event-driven architecture
 
 Contoh minimal `docker-compose.yml`:
 
@@ -26,7 +17,7 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - db
       - redis
@@ -44,18 +35,18 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: trello_clone
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   redis:
     image: redis:7
     ports:
-      - "6379:6379"
+      - '6379:6379'
 
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"
-      - "15672:15672" # UI monitoring
+      - '5672:5672'
+      - '15672:15672' # UI monitoring
 ```
 
 ---
@@ -88,8 +79,8 @@ libs/
 
 Karena kamu pakai PostgreSQL, bisa gunakan:
 
-* Prisma (kalau ingin cepat & clean)
-* TypeORM (kalau ingin lebih fleksibel dengan relasi kompleks)
+- Prisma (kalau ingin cepat & clean)
+- TypeORM (kalau ingin lebih fleksibel dengan relasi kompleks)
 
 Contoh (pakai Prisma):
 
@@ -150,9 +141,9 @@ model WorkspaceMember {
 
 Kamu bisa bikin `libs/events` yang berisi:
 
-* Event interface (`CardCreatedEvent`, `WorkspaceJoinedEvent`, dll)
-* Publisher service
-* Consumer di `worker` app
+- Event interface (`CardCreatedEvent`, `WorkspaceJoinedEvent`, dll)
+- Publisher service
+- Consumer di `worker` app
 
 Contoh publisher:
 
@@ -187,10 +178,10 @@ async handleCardCreated(payload: CardCreatedEvent) {
 
 Redis bisa kamu pakai untuk:
 
-* Caching (misal: daftar workspace, board, user profile)
-* Rate limiting API
-* Menyimpan session / token
-* Pub/Sub (kalau mau real-time ringan)
+- Caching (misal: daftar workspace, board, user profile)
+- Rate limiting API
+- Menyimpan session / token
+- Pub/Sub (kalau mau real-time ringan)
 
 Contoh koneksi:
 
@@ -233,10 +224,10 @@ Gunakan DTO dan guards supaya API rapi, secure, dan maintainable.
 
 ## ✨ Bonus Saran Arsitektur
 
-* Gunakan **CQRS pattern** (bawaan NestJS) untuk memisahkan perintah & query.
-* Pakai modul Auth dengan JWT + Guard bawaan NestJS.
-* Buat **migration database** sejak awal (jangan tunggu nanti).
-* Pakai **event sourcing kecil** dulu, misal setiap card dibuat atau diassign member → publish event.
+- Gunakan **CQRS pattern** (bawaan NestJS) untuk memisahkan perintah & query.
+- Pakai modul Auth dengan JWT + Guard bawaan NestJS.
+- Buat **migration database** sejak awal (jangan tunggu nanti).
+- Pakai **event sourcing kecil** dulu, misal setiap card dibuat atau diassign member → publish event.
 
 ---
 
@@ -258,13 +249,13 @@ Aku sertakan contoh kode ringkas supaya kamu bisa langsung implementasikan di pr
 
 # 1) CQRS (Command Query Responsibility Segregation) — konsep & cara pakai di NestJS
 
-**Inti:** Pisahkan *mutations* (command — operasi yang mengubah state) dan *reads* (query — operasi baca) menjadi jalur/handler terpisah. Ini membuat kode lebih jelas, mudah diuji, dan cocok dengan event-driven.
+**Inti:** Pisahkan _mutations_ (command — operasi yang mengubah state) dan _reads_ (query — operasi baca) menjadi jalur/handler terpisah. Ini membuat kode lebih jelas, mudah diuji, dan cocok dengan event-driven.
 
 ## Kenapa pakai?
 
-* Memisahkan tanggung jawab → handler sederhana.
-* Mudah menambahkan optimisasi baca (cache) tanpa mengubah logika write.
-* Cocok untuk publish event setelah command berhasil.
+- Memisahkan tanggung jawab → handler sederhana.
+- Mudah menambahkan optimisasi baca (cache) tanpa mengubah logika write.
+- Cocok untuk publish event setelah command berhasil.
 
 ## Struktur dasar di NestJS
 
@@ -361,7 +352,7 @@ export class GetCardQuery {
 import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-  imports: [CqrsModule, /* Drizzle providers */],
+  imports: [CqrsModule /* Drizzle providers */],
   providers: [CreateCardHandler, GetCardHandler, CardsRepository],
 })
 export class CardsModule {}
@@ -383,9 +374,9 @@ npm install @nestjs/passport passport passport-jwt @nestjs/jwt bcrypt
 
 ## Flow singkat
 
-* Register/login mengembalikan JWT.
-* Semua endpoint yang butuh auth pakai `AuthGuard('jwt')`.
-* JWT strategy memverifikasi token dan menambahkan `req.user`.
+- Register/login mengembalikan JWT.
+- Semua endpoint yang butuh auth pakai `AuthGuard('jwt')`.
+- JWT strategy memverifikasi token dan menambahkan `req.user`.
 
 ## Contoh implementasi (ringkas)
 
@@ -432,8 +423,8 @@ export class AuthModule {}
 
 ### AuthService (login/register)
 
-* Register: hash password (bcrypt) → simpan user (Drizzle)
-* Login: verifikasi password → `jwtService.sign({ sub: user.id, email: user.email })`
+- Register: hash password (bcrypt) → simpan user (Drizzle)
+- Login: verifikasi password → `jwtService.sign({ sub: user.id, email: user.email })`
 
 ### Menggunakan Guard di controller
 
@@ -471,21 +462,33 @@ Biasanya kamu definisikan schema di `drizzle/schema.ts` atau per model lalu gene
 Contoh table definition (`drizzle/schema.ts`):
 
 ```ts
-import { pgTable, serial, varchar, text, timestamp, boolean, uniqueIndex } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  serial,
+  varchar,
+  text,
+  timestamp,
+  boolean,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core';
 
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  display_name: varchar('display_name', { length: 255 }).notNull(),
-  email: varchar('email', { length: 255 }).notNull(),
-  password: text('password').notNull(),
-  profile_picture_url: text('profile_picture_url'),
-  created_at: timestamp('created_at').defaultNow(),
-  updated_at: timestamp('updated_at').defaultNow(),
-}, (table) => {
-  return {
-    email_idx: uniqueIndex('users_email_idx').on(table.email),
-  };
-});
+export const users = pgTable(
+  'users',
+  {
+    id: serial('id').primaryKey(),
+    display_name: varchar('display_name', { length: 255 }).notNull(),
+    email: varchar('email', { length: 255 }).notNull(),
+    password: text('password').notNull(),
+    profile_picture_url: text('profile_picture_url'),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+  },
+  (table) => {
+    return {
+      email_idx: uniqueIndex('users_email_idx').on(table.email),
+    };
+  },
+);
 ```
 
 ## Konfigurasi `drizzle-kit` (package.json script)
@@ -494,9 +497,9 @@ Tambahkan `drizzle.config.mjs`:
 
 ```js
 export default {
-  schema: "./drizzle/schema.ts",
-  out: "./drizzle/migrations",
-  driver: "pg",
+  schema: './drizzle/schema.ts',
+  out: './drizzle/migrations',
+  driver: 'pg',
   dbCredentials: {
     connectionString: process.env.DATABASE_URL,
   },
@@ -524,17 +527,17 @@ Script di package.json:
 
 # 4) Event sourcing kecil / event-driven — publish event tiap aksi penting
 
-> Maksudnya: setiap aksi write (mis. card dibuat, user ditambahkan ke card) mem-publish event yang akan di-*consume* service lain (worker, notifikasi, activity log).
+> Maksudnya: setiap aksi write (mis. card dibuat, user ditambahkan ke card) mem-publish event yang akan di-_consume_ service lain (worker, notifikasi, activity log).
 
 ## Komponen:
 
-* **Publisher**: di command handler setelah DB berhasil (synchronous short). Publisher kirim ke RabbitMQ.
-* **Consumer**: aplikasi worker (di monorepo) yang subscribe queue dan memproses event (kirim email, simpan activity, push notification).
-* **Event contract**: DTO/Interface shared di `libs/events` untuk type safety.
+- **Publisher**: di command handler setelah DB berhasil (synchronous short). Publisher kirim ke RabbitMQ.
+- **Consumer**: aplikasi worker (di monorepo) yang subscribe queue dan memproses event (kirim email, simpan activity, push notification).
+- **Event contract**: DTO/Interface shared di `libs/events` untuk type safety.
 
 ## Pilih library RabbitMQ untuk NestJS
 
-* `@golevelup/nestjs-rabbitmq` (sederhana) — contoh di bawah pakai ini.
+- `@golevelup/nestjs-rabbitmq` (sederhana) — contoh di bawah pakai ini.
 
 ```bash
 npm i @golevelup/nestjs-rabbitmq amqplib
@@ -585,8 +588,8 @@ export class CardCreatedConsumer {
 
 ## Idempotency & error handling
 
-* Consumer harus idempotent (jika event diterima ulang, tidak duplikat action).
-* Simpan processed event ids (opsional) atau gunakan dedup pada consumer.
+- Consumer harus idempotent (jika event diterima ulang, tidak duplikat action).
+- Simpan processed event ids (opsional) atau gunakan dedup pada consumer.
 
 ---
 
@@ -595,11 +598,11 @@ export class CardCreatedConsumer {
 1. Client request `POST /cards` (AuthGuard memverifikasi JWT).
 2. Controller dispatch `CreateCardCommand` (CQRS).
 3. `CreateCardHandler`:
+   - simpan card via Drizzle (migrations sudah dilakukan)
+   - publish internal domain event (`EventBus`)
+   - publish message ke RabbitMQ via `RabbitPublisher`
+   - return hasil ke controller
 
-   * simpan card via Drizzle (migrations sudah dilakukan)
-   * publish internal domain event (`EventBus`)
-   * publish message ke RabbitMQ via `RabbitPublisher`
-   * return hasil ke controller
 4. Worker service menerima `card.created` dari RabbitMQ → proses notifikasi / activity log / email.
 
 ---
@@ -645,21 +648,21 @@ drizzle/
 
 # Praktikal: beberapa perintah & tips
 
-* **Start dev**: `docker-compose up --build`
-* **Run migrations**: `npm run migrate:push` (pastikan env DATABASE_URL mengarah ke container db)
-* **Generate migration** (setelah ubah schema): `npm run migrate:dev`
-* **Test RabbitMQ**: akses `http://localhost:15672` (default guest/guest) untuk manajemen
+- **Start dev**: `docker-compose up --build`
+- **Run migrations**: `npm run migrate:push` (pastikan env DATABASE_URL mengarah ke container db)
+- **Generate migration** (setelah ubah schema): `npm run migrate:dev`
+- **Test RabbitMQ**: akses `http://localhost:15672` (default guest/guest) untuk manajemen
 
 ---
 
 # Rangkuman singkat & checklist implementasi
 
-* [ ] Tambah `@nestjs/cqrs` → buat command/query & handler untuk setiap aksi utama.
-* [ ] Setup JWT auth (Passport strategy, guards, AuthService).
-* [ ] Setup Drizzle schema → tulis tabel sesuai ERD → gunakan `drizzle-kit` untuk migrasi.
-* [ ] Integrasi RabbitMQ (`@golevelup/nestjs-rabbitmq`) → publisher di handler, consumer di worker.
-* [ ] Pastikan idempotensi di consumer; tambahkan `processed_event` table jika perlu.
-* [ ] Gunakan Redis untuk cache query & session jika butuh real-time push.
+- [ ] Tambah `@nestjs/cqrs` → buat command/query & handler untuk setiap aksi utama.
+- [ ] Setup JWT auth (Passport strategy, guards, AuthService).
+- [ ] Setup Drizzle schema → tulis tabel sesuai ERD → gunakan `drizzle-kit` untuk migrasi.
+- [ ] Integrasi RabbitMQ (`@golevelup/nestjs-rabbitmq`) → publisher di handler, consumer di worker.
+- [ ] Pastikan idempotensi di consumer; tambahkan `processed_event` table jika perlu.
+- [ ] Gunakan Redis untuk cache query & session jika butuh real-time push.
 
 ---
 

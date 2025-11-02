@@ -6,3 +6,5 @@ export class AppService {
     return 'Hello World!';
   }
 }
+
+export const users: { email: string; name: string; id: string }[] = [];
