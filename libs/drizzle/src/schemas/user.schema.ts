@@ -20,7 +20,7 @@ const userTable = pgTable('users', {
   username: varchar('username', { length: 100 }).notNull().notNull().unique(),
   password: text('password').notNull(),
   avatarKey: text('avatar_key'),
-  avatarResizeStatus: avatarResizeStatusEnum('avatar_resize_status').default('none'),
+  avatarResizeStatus: avatarResizeStatusEnum('avatar_resize_status').default('none').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at')
     .notNull()

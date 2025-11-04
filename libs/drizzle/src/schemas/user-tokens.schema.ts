@@ -16,6 +16,7 @@ const userTokensTable = pgTable(
     sessionId: text('session_id'),
     revokedAt: timestamp('revoked_at'),
     createdAt: timestamp('created_at').notNull().defaultNow(),
+    expiresAt: timestamp('expires_at').notNull(),
     updatedAt: timestamp('updated_at')
       .notNull()
       .defaultNow()

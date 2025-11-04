@@ -1,11 +1,11 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { EnvService } from '@app/common';
 import { mapPosgresError } from './helpers';
 
 @Injectable()
-export class DrizzleService implements OnModuleInit, OnModuleDestroy {
+export class DrizzleService implements OnModuleDestroy {
   private client: Pool;
   private _db: ReturnType<typeof drizzle>;
   private reconnecting = false;

@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "avatar_resize_status" SET NOT NULL;
