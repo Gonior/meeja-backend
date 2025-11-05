@@ -7,6 +7,7 @@ import { RedisModule } from '@app/redis';
 import { ClsModule, ClsService } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 import { randomBytes } from 'crypto';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -46,7 +47,7 @@ import { randomBytes } from 'crypto';
                 }
               : undefined,
 
-          customProps: (req) => {
+          customProps: () => {
             return {
               requestId: cls.get('requestId'),
               userId: cls.get('userId'),
@@ -62,6 +63,7 @@ import { randomBytes } from 'crypto';
         },
       }),
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],
