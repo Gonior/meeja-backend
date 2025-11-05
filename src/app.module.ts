@@ -69,6 +69,5 @@ import { randomBytes } from 'crypto';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     //consumer.apply(MulterMaxSizeMiddleware).forRoutes('upload', 'register');
-    // consumer.apply(RequestContextMiddleware).forRoutes('*');
   }
 }

@@ -12,7 +12,7 @@ import { EnvService } from '@app/common';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
-  constructor(private env: EnvService) {}
+  constructor(private _env: EnvService) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const req = ctx.getRequest();
@@ -40,7 +40,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
             res.cookie(name, value, {
               httpOnly: true,
               sameSite: 'lax',
-              secure: false, // this.env.isProduction
+              secure: false, // this._env.isProduction
               ...options,
             });
           }
@@ -56,6 +56,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
           response && response.data && Array.isArray(response.data) && response.meta;
         return {
           success: true,
+          statusCode: res.statusCode,
           message,
           data: response?.data ?? response,
           ...(response?.meta && { meta: response.meta }),
