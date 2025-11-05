@@ -1,0 +1,39 @@
+services:
+  app:
+    build: .
+    container_name: nest_app
+    command: pnpm start:${NODE_ENV_COMMAND:-dev}
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ${ENV_FILE:-.env.development}
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: meeja
+      POSTGRES_PASSWORD: meeja
+      POSTGRES_DB: meejaDb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis:7
+    container_name: redis_server
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+
+volumes:
+  postgres_data:
