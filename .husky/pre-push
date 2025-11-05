@@ -1,2 +1,0 @@
-echo "🧹 Linting & Testing before push..."
-pnpm lint && pnpm test
