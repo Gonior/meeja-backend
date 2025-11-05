@@ -6,6 +6,7 @@ import { EnvService } from '@app/common';
 export class RedisService implements OnModuleInit, OnModuleDestroy {
   private client: RedisClientType;
   private connected = false;
+  private reconnecting = false;
   private readonly logger = new Logger(RedisService.name);
 
   constructor(private readonly env: EnvService) {}
@@ -29,23 +30,26 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     });
 
     this.client.on('reconnecting', () => {
-      this.logger.debug(`🛠️ Redis reconnecting...`, RedisService.name);
+      this.reconnecting = true;
+      this.logger.debug(`🛠️ Redis reconnecting...`);
     });
     this.client.on('end', () => {
       this.connected = false;
-      // this.logger.warn(`Redis connection closed`, RedisService.name);
+      // this.logger.warn(`Redis connection closed`);
     });
     this.client.on('connect', () => {
-      this.logger.warn(`✅ Redis connected successfully`, RedisService.name);
+      this.reconnecting = false;
+      this.logger.warn(`✅ Redis connected successfully`);
     });
     this.client.on('ready', () => {
+      this.reconnecting = false;
       this.connected = true;
-      this.logger.warn(`Redis is ready`, RedisService.name);
+      this.logger.warn(`Redis is ready`);
     });
     this.client.connect().catch((error) => {
       this.logger.error(`❌ Redis connection failed: ${error?.message}`);
     });
-    this.logger.warn(`Redis connecting in backgroud, continuing app startup...`, RedisService.name);
+    this.logger.warn(`Redis connecting in backgroud, continuing app startup...`);
   }
 
   getClient() {
@@ -68,14 +72,14 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         })
         .catch((err) => {
           clearTimeout(timer);
-          this.logger.warn(`Redis operation failed:${err.message}`, RedisService.name);
+          this.logger.warn(`Redis operation failed:${err.message}`);
           resolve(null);
         });
     });
   }
   async set(key: string, value: any, options?: { EX?: number }) {
     if (!this.client.isReady) {
-      this.logger.warn('⚠️ Redis not connected, nothing to set', RedisService.name);
+      this.logger.warn('⚠️ Redis not connected, nothing to set');
       return null;
     } else {
       const serialized = typeof value === 'string' ? value : JSON.stringify(value);
@@ -85,7 +89,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
   async get(key: string) {
     if (!this.client.isReady) {
-      this.logger.warn('⚠️ Redis not connected, nothing to get', RedisService.name);
+      this.logger.warn('⚠️ Redis not connected, nothing to get');
       return null;
     } else {
       return this.withTimeout(this.client.get(key), 2000);
@@ -100,14 +104,36 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     if (!this.client) return;
     try {
       if (this.connected && this.client.isOpen) {
-        this.logger.warn('🧹 Closing Redis connection...', RedisService.name);
+        this.logger.warn('🧹 Closing Redis connection...');
         await this.client.quit();
-        this.logger.debug('Redis connection closed gracefully...', RedisService.name);
+        this.logger.debug('Redis connection closed gracefully...');
       } else {
-        this.logger.debug('Redis client not connected, skipping close', RedisService.name);
+        this.logger.debug('Redis client not connected, skipping close');
       }
     } catch (error) {
-      this.logger.warn(`Redis shutdown error (ignored): ${error?.message}`, RedisService.name);
+      this.logger.warn(`Redis shutdown error (ignored): ${error?.message}`);
+    }
+  }
+
+  async checkHealth() {
+    try {
+      const start = Date.now();
+      const response = await this.client.ping();
+      const latency = Date.now() - start;
+      return {
+        status: response === 'PONG' ? 'ok' : 'error',
+        latency: `${latency}ms`,
+        reconnecting: this.reconnecting,
+      };
+    } catch (error) {
+      let message = '';
+      if (error instanceof Error) message = error.message;
+      else message = String(error);
+      return {
+        status: 'error',
+        message: message,
+        reconnectiong: this.reconnecting,
+      };
     }
   }
 }

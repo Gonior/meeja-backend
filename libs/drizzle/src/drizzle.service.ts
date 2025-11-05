@@ -23,12 +23,12 @@ export class DrizzleService implements OnModuleDestroy {
     });
     // terpicu ketika a new client connects
     pool.on('connect', () => {
-      this.logger.log('✅ PostgreSQL connected', DrizzleService.name);
+      this.logger.log('✅ PostgreSQL connected');
       if (this.reconnecting) {
         // kalo semisal sebelumnya dalam mode reconnect, matikan interval
         clearInterval(this.reconnectInterval);
         this.reconnecting = false;
-        this.logger.warn('🔄️ Reconnect watcher stopped!', DrizzleService.name);
+        this.logger.warn('🔄️ Reconnect watcher stopped!');
       }
     });
 

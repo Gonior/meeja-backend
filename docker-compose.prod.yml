@@ -2,17 +2,13 @@ services:
   app:
     build:
       context: .
-      target: dev
+      target: prod
+    image: meeja-backend-app:latest
     container_name: nest_app
-    command: pnpm start:dev
     ports:
       - '3000:3000'
-    volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules
-      - vscode-server:/root/.vscode-server
     env_file:
-      - .env.development
+      - .env.production
     depends_on:
       - postgres
       - redis
@@ -28,16 +24,11 @@ services:
       POSTGRES_DB: meejadb
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
 
   redis:
     image: redis:7
     container_name: redis_server
     restart: unless-stopped
-    ports:
-      - '6379:6379'
 
 volumes:
   postgres_data:
-  vscode-server: {}
