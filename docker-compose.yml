@@ -13,6 +13,7 @@ services:
       - vscode-server:/root/.vscode-server
     env_file:
       - .env.development
+    user: '${UID}:${GID}'
     depends_on:
       - postgres
       - redis

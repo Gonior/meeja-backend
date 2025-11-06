@@ -27,14 +27,9 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     if (usernameExists) throw new ConflictException('Username already exists');
 
     const hash = await PasswordUtil.hash(password);
-    const user = new User({
-      displayName,
-      passwordHash: hash,
-      email: new Email(email),
-      username: new Username(username),
-    });
+    const user = User.create(displayName, username, email, hash);
 
     const persintent = await this.userRepo.create(user);
-    this.logger.log(`User created (id ${persintent.getId()})`);
+    this.logger.log(`User created (id ${persintent.id})`);
   }
 }

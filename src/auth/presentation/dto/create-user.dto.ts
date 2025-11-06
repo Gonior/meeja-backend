@@ -7,7 +7,7 @@ export class CreateUser
   implements
     Omit<
       typeof UsersTable.$inferSelect,
-      'id' | 'createdAt' | 'updatedAt' | 'avatarResizeStatus' | 'avatarKey'
+      'id' | 'createdAt' | 'updatedAt' | 'avatarResizeStatus' | 'avatarKey' | 'bio'
     >
 {
   @ApiProperty({

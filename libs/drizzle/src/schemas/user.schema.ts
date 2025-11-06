@@ -21,6 +21,7 @@ const userTable = pgTable('users', {
   password: text('password').notNull(),
   avatarKey: text('avatar_key'),
   avatarResizeStatus: avatarResizeStatusEnum('avatar_resize_status').default('none').notNull(),
+  bio: text('bio').default(''),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at')
     .notNull()

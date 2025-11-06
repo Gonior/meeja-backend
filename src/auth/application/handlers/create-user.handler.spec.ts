@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { I_USER_REPOSITORY, PasswordUtil } from '@app/common';
 import { GetUserByEmailQuery } from '../../../user/application/queries/get-user-by-email.query';
-import { User, Email, Username, IUserRepository } from '../../../user/domain';
+import { User, Email, Username, IUserRepository, UserProfile } from '../../../user/domain';
 import { CreateUserHandler } from './create-user.handler';
 import { CreateUserCommand } from '../commands/create-user.command';
 
@@ -13,7 +13,7 @@ import { GetUserByUsernameQuery } from 'src/user/application';
 jest.mock('@app/common', () => ({
   ...jest.requireActual('@app/common'),
   PasswordUtil: {
-    hash: jest.fn().mockResolvedValue('hashed_pw'),
+    hash: jest.fn().mockResolvedValue('hashed_password'),
   },
 }));
 jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
@@ -27,6 +27,9 @@ describe('CreateUserHandler', () => {
     passwordHash: 'asdasdasd',
     email: new Email('test@mail.com'),
     username: new Username('nommm'),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    profile: new UserProfile(),
     id: 1,
   });
   beforeEach(async () => {
@@ -36,15 +39,7 @@ describe('CreateUserHandler', () => {
         {
           provide: I_USER_REPOSITORY,
           useValue: {
-            create: jest.fn().mockResolvedValue(
-              new User({
-                id: 1,
-                displayName: 'nom',
-                passwordHash: 'password',
-                email: new Email('testa@mail.com'),
-                username: new Username('nommm'),
-              }),
-            ),
+            create: jest.fn().mockResolvedValue(mockValue),
           },
         },
         {
@@ -61,7 +56,13 @@ describe('CreateUserHandler', () => {
     userRepo = module.get(I_USER_REPOSITORY);
   });
 
-  afterEach(() => jest.clearAllMocks());
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2025-11-06T06:09:49.000Z'));
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.useRealTimers();
+  });
 
   it('should throw email already exists (conflict exception)', async () => {
     queryBus.execute.mockResolvedValueOnce(mockValue).mockResolvedValueOnce(null);
@@ -107,12 +108,17 @@ describe('CreateUserHandler', () => {
 
     expect(userRepo.create).toHaveBeenCalledTimes(1);
 
+    // expect(userRepo.create).toHaveBeenCalledWith(
+    //   User.create(dto.displayName, dto.username, dto.email, 'hashed_password'),
+    // );
     expect(userRepo.create).toHaveBeenCalledWith(
-      new User({
-        displayName: 'nom',
-        passwordHash: 'hashed_pw',
-        email: new Email('testa@mail.com'),
-        username: new Username('nommm'),
+      expect.objectContaining({
+        props: expect.objectContaining({
+          displayName: dto.displayName,
+          email: expect.objectContaining({ data: dto.email }),
+          username: expect.objectContaining({ data: dto.username }),
+          passwordHash: 'hashed_password',
+        }),
       }),
     );
 

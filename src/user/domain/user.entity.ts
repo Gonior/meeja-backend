@@ -1,54 +1,72 @@
-import { AvatarResizeStatus } from '@app/common';
 import { Email } from './value-object/user-email.vo';
+import { UserProfile } from './value-object/user-profile.vo';
 import { Username } from './value-object/username.vo';
 import { UsersTable } from '@app/drizzle';
 export class User {
   constructor(
-    private readonly prop: {
+    private readonly props: {
       displayName: string;
       passwordHash: string;
       email: Email;
       username: Username;
       id?: number;
-      avatarKey?: string | null;
-      avatarResizeStatus?: AvatarResizeStatus;
+      profile: UserProfile;
+      createdAt: Date;
+      updatedAt: Date;
     },
   ) {}
 
-  getEmail() {
-    return this.prop.email.value;
+  get email() {
+    return this.props.email.value;
   }
 
-  getUsername() {
-    return this.prop.username.value;
+  get username() {
+    return this.props.username.value;
   }
 
-  getPasswordHash() {
-    return this.prop.passwordHash;
+  get passwordHash() {
+    return this.props.passwordHash;
   }
 
-  getAvatarKey() {
-    return this.prop.avatarKey;
+  get profile() {
+    return this.props.profile;
   }
 
-  getAvatarResizeStatus() {
-    return this.prop.avatarResizeStatus;
+  get id() {
+    if (!this.props.id) throw new Error('User not persitenced');
+    return this.props.id;
   }
 
-  getId() {
-    if (!this.prop.id) throw new Error('User not persitented');
-
-    return this.prop.id;
+  updateProfile(profile: UserProfile): User {
+    return new User({
+      ...this.props,
+      profile,
+      updatedAt: new Date(),
+    });
   }
 
-  toPersistent(): typeof UsersTable.$inferInsert {
+  toPrimitives(): typeof UsersTable.$inferInsert {
     return {
-      displayName: this.prop.displayName,
-      email: this.prop.email.value,
-      password: this.prop.passwordHash,
-      username: this.prop.username.value,
-      avatarKey: this.prop.avatarKey,
-      avatarResizeStatus: this.prop.avatarResizeStatus ?? 'none',
+      displayName: this.props.displayName,
+      email: this.props.email.value,
+      password: this.props.passwordHash,
+      username: this.props.username.value,
+      avatarKey: this.props.profile.avatarKey,
+      avatarResizeStatus: this.props.profile.avatarResizeStatus ?? 'none',
+      bio: this.props.profile.bio,
     };
+  }
+
+  static create(displayName: string, username: string, email: string, passwordHash: string): User {
+    const now = new Date();
+    return new User({
+      displayName: displayName,
+      email: new Email(email),
+      username: new Username(username),
+      profile: new UserProfile(),
+      passwordHash: passwordHash,
+      createdAt: now,
+      updatedAt: now,
+    });
   }
 }
