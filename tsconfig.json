@@ -27,9 +27,7 @@
       "@app/drizzle": ["libs/drizzle/src"],
       "@app/drizzle/*": ["libs/drizzle/src/*"],
       "@app/redis": ["libs/redis/src"],
-      "@app/redis/*": ["libs/redis/src/*"],
-      "@app/user": ["libs/user/src"],
-      "@app/user/*": ["libs/user/src/*"]
+      "@app/redis/*": ["libs/redis/src/*"]
     }
   }
 }

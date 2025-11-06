@@ -113,10 +113,10 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1",
       "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
       "^@app/drizzle(|/.*)$": "<rootDir>/libs/drizzle/src/$1",
-      "^@app/redis(|/.*)$": "<rootDir>/libs/redis/src/$1",
-      "^@app/user(|/.*)$": "<rootDir>/libs/user/src/$1"
+      "^@app/redis(|/.*)$": "<rootDir>/libs/redis/src/$1"
     }
   }
 }

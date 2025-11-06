@@ -1,0 +1,1 @@
+export const I_USER_REPOSITORY = 'I_USER_REPOSITORY';

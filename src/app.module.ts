@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { CqrsModule } from '@nestjs/cqrs';
 import { CommonModule, EnvService } from '@app/common';
 import { DrizzleModule } from '@app/drizzle';
 import { RedisModule } from '@app/redis';
@@ -8,10 +7,10 @@ import { ClsModule, ClsService } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 import { randomBytes } from 'crypto';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    CqrsModule,
     CommonModule,
     DrizzleModule,
     RedisModule,
@@ -64,6 +63,7 @@ import { AuthModule } from './auth/auth.module';
       }),
     }),
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [],
