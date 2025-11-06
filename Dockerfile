@@ -10,11 +10,8 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
   pnpm install --frozen-lockfile
 
 # Tambahkan use yang sama dengan dengang host
-ARG UID=1000
-ARG GID=1000
 
-RUN addgroup -g ${GID} dev && adduser -D -u ${UID} -G dev dev
-RUN mkdir -p /usr/src/app && chown -R dev:dev /usr/src/app
+RUN mkdir -p /usr/src/app && chown -R node:node /usr/src/app
 
 # gunakan root untuk install deps
 USER root
