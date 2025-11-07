@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LoginCommandHandler } from './login.handler';
+import { LoginCommandHandler } from './login.command.handler';
 import { QueryBus } from '@nestjs/cqrs';
-
 import { TokenService } from 'src/auth/domain/services/token.service';
 import { LoginCommand } from '../commands/login.command';
 import { Email, User, Username, UserProfile } from 'src/user/domain';

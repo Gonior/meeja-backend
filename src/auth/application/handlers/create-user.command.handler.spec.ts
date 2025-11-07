@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { I_USER_REPOSITORY, PasswordUtil } from '@app/common';
 import { GetUserByEmailQuery } from '../../../user/application/queries/get-user-by-email.query';
 import { User, Email, Username, IUserRepository, UserProfile } from '../../../user/domain';
-import { CreateUserHandler } from './create-user.handler';
+import { CreateUserCommandHandler } from './create-user.command.handler';
 import { CreateUserCommand } from '../commands/create-user.command';
 
 import { ConflictException, Logger } from '@nestjs/common';
@@ -18,7 +18,7 @@ jest.mock('@app/common', () => ({
 }));
 jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
 describe('CreateUserHandler', () => {
-  let handler: CreateUserHandler;
+  let handler: CreateUserCommandHandler;
   let userRepo: jest.Mocked<IUserRepository>;
   let queryBus: jest.Mocked<QueryBus>;
 
@@ -35,7 +35,7 @@ describe('CreateUserHandler', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        CreateUserHandler,
+        CreateUserCommandHandler,
         {
           provide: I_USER_REPOSITORY,
           useValue: {
@@ -51,7 +51,7 @@ describe('CreateUserHandler', () => {
       ],
     }).compile();
 
-    handler = module.get<CreateUserHandler>(CreateUserHandler);
+    handler = module.get<CreateUserCommandHandler>(CreateUserCommandHandler);
     queryBus = module.get(QueryBus);
     userRepo = module.get(I_USER_REPOSITORY);
   });

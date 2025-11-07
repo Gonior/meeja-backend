@@ -7,8 +7,8 @@ import { User, Email, Username, type IUserRepository } from 'src/user/domain';
 import { GetUserByUsernameQuery, GetUserByEmailQuery } from 'src/user/application';
 
 @CommandHandler(CreateUserCommand)
-export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
-  private readonly logger = new Logger(CreateUserHandler.name);
+export class CreateUserCommandHandler implements ICommandHandler<CreateUserCommand> {
+  private readonly logger = new Logger(CreateUserCommandHandler.name);
   constructor(
     private readonly queryBus: QueryBus,
     @Inject(I_USER_REPOSITORY) private readonly userRepo: IUserRepository,
