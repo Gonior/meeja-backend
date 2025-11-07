@@ -4,7 +4,7 @@ export class Email {
   }
 
   private validate(value: string) {
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) throw new Error('email is not valid');
+    if (!/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(value)) throw new Error('email is not valid');
   }
 
   get value() {

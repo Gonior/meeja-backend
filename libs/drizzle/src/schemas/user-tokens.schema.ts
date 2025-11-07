@@ -13,7 +13,7 @@ const userTokensTable = pgTable(
     token: text('token').notNull(),
     userAgent: text('user_agent'),
     ipAddress: text('ip_address'),
-    sessionId: text('session_id'),
+    sessionId: text('session_id').notNull(),
     revokedAt: timestamp('revoked_at'),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     expiresAt: timestamp('expires_at').notNull(),

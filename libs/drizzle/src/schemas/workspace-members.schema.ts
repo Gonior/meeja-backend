@@ -4,7 +4,7 @@ import workspaceTable from './workspace.schema';
 
 import { sql } from 'drizzle-orm';
 
-export const workspaceRoleEnum = pgEnum('workspace_role', ['owner', 'admin', 'member', 'viewer']);
+export const workspaceRoleEnum = pgEnum('workspace_role', ['owner', 'editor', 'viewer']);
 export type WorkspaceRole = (typeof workspaceRoleEnum.enumValues)[number];
 
 const workspaMembersTable = pgTable(

@@ -112,6 +112,9 @@
       "<rootDir>/src/",
       "<rootDir>/libs/"
     ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!uuid)/"
+    ],
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/src/$1",
       "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",

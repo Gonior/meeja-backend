@@ -45,7 +45,20 @@ export class User {
     });
   }
 
-  toPrimitives(): typeof UsersTable.$inferInsert {
+  static fromPersistence(raw: typeof UsersTable.$inferSelect): User {
+    return new User({
+      id: raw.id,
+      displayName: raw.displayName,
+      username: new Username(raw.username ?? ''),
+      email: new Email(raw.email),
+      passwordHash: raw.password,
+      profile: new UserProfile(raw.bio ?? '', raw.avatarKey, raw.avatarResizeStatus),
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+    });
+  }
+
+  toPersistence(): typeof UsersTable.$inferInsert {
     return {
       displayName: this.props.displayName,
       email: this.props.email.value,

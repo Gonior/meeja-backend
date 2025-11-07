@@ -56,12 +56,8 @@ describe('CreateUserHandler', () => {
     userRepo = module.get(I_USER_REPOSITORY);
   });
 
-  beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2025-11-06T06:09:49.000Z'));
-  });
   afterEach(() => {
     jest.clearAllMocks();
-    jest.useRealTimers();
   });
 
   it('should throw email already exists (conflict exception)', async () => {

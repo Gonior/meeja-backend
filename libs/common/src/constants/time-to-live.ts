@@ -1,0 +1,8 @@
+export const TTL = {
+  STR_ACCESS_TOKEN: '1h',
+  STR_REFRESH_TOKEN: '30d',
+  SCD_ACCESS_TOKEN: 60 * 60,
+  MSSCD_ACCESS_TOKEN: 60 * 60 * 1000,
+  SCD_REFRESH_TOKEN: 7 * 24 * 60 * 60,
+  MSSCD_REFRESH_TOKEN: 7 * 24 * 60 * 60 * 1000,
+} as const;
