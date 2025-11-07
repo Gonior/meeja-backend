@@ -1,6 +1,6 @@
 export class Username {
   constructor(private readonly data?: string) {
-    if(data) this.validate(data);
+    if (data) this.validate(data);
   }
 
   private validate(value: string) {

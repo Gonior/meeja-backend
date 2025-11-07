@@ -6,7 +6,6 @@ import { DrizzleService, UsersTable } from '@app/drizzle';
 import { IUserRepository } from '../domain/user.repository';
 import { User } from '../domain/user.entity';
 
-
 @Injectable()
 export class UserRepositoryImpl implements IUserRepository {
   constructor(private readonly orm: DrizzleService) {}

@@ -30,7 +30,9 @@ export class TokenJwtService {
 
   async verify(token: string) {
     try {
-      return await this.jwt.verifyAsync<IJwtPayload>(token);
+      return await this.jwt.verifyAsync<IJwtPayload & { exp: number }>(token, {
+        secret: this.env.secretConfig.jwtRefreshSecret,
+      });
     } catch (error) {
       const message = error instanceof Error ? error.message : error;
       this.logger.error(`Verify token error: (${message})`);
