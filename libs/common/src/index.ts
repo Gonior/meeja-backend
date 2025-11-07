@@ -7,3 +7,5 @@ export * from './helpers';
 export * from './filters/all-exception.filter';
 export * from './constants';
 export * from './enums';
+export * from './guards';
+export * from './decorators';

@@ -1,5 +1,14 @@
 // modules/auth/auth.controller.ts
-import { Body, Controller, Headers, Ip, Post, Req, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Headers,
+  Ip,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiHeader } from '@nestjs/swagger';
 import { type Request } from 'express';
@@ -8,7 +17,15 @@ import { CreateUser } from './dto/create-user.dto';
 import { CreateUserCommand } from '../application/commands/create-user.command';
 import { LoginDto } from './dto/login.dto';
 import { LoginCommand } from '../application/commands/login.command';
-import { ApiResponse, COOKIE_KEY, TokenResponse, TTL } from '@app/common';
+import {
+  ApiResponse,
+  COOKIE_KEY,
+  CurrentUser,
+  type IJwtPayload,
+  JwtAuthGuard,
+  TokenResponse,
+  TTL,
+} from '@app/common';
 import { RefreshTokenCommand } from '../application/commands/refresh-token.command';
 import { LogoutCommand } from '../application/commands/logout.command';
 
@@ -104,5 +121,16 @@ export class AuthController {
         isRevoked,
       },
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'JWT Access Token: Bearer <TOKEN>',
+    required: true,
+  })
+  @Post('audit')
+  async auditToken(@CurrentUser() user: IJwtPayload) {
+    return user;
   }
 }

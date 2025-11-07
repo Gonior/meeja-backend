@@ -5,14 +5,11 @@ import {
   NestInterceptor,
   StreamableFile,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { ClsServiceManager } from 'nestjs-cls';
 import { map, Observable } from 'rxjs';
-import { EnvService } from '@app/common';
 
 @Injectable()
-export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
-  // constructor(private _env: EnvService) {}
+export class ApiResponseInterceptor<T> implements NestInterceptor<T, any> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const req = ctx.getRequest();
@@ -22,6 +19,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
     const userId = cls?.get('userId');
     return next.handle().pipe(
       map((response: unknown) => {
+        console.log(response);
         let message = 'Request successfully';
         let data: null | object | string | unknown = null;
         // how to use setCookies :
@@ -57,16 +55,16 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
           // biar message nya ga double-double
           if (
             'message' in response &&
-            typeof response.message === 'string' &&
-            response.message !== undefined
+            response.message !== undefined &&
+            typeof response.message === 'string'
           ) {
             message = response.message;
             delete response.message;
           }
         }
 
-        if (response !== undefined && response !== null && typeof response === 'object') {
-          if ('data' in response) data = response.data;
+        if (response !== undefined && response !== null) {
+          if (typeof response === 'object' && 'data' in response) data = response.data;
           else data = response;
         }
 

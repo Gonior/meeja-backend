@@ -1,13 +1,14 @@
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { Logger } from 'nestjs-pino';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
+
 import { AppModule } from './app.module';
 import {
   AllExceptionFilter,
   AppValidationPipe,
   EnvService,
-  ResponseInterceptor,
+  ApiResponseInterceptor,
 } from '@app/common';
 
 async function bootstrap() {
@@ -37,7 +38,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionFilter());
 
   // success response biar konsisten
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  app.useGlobalInterceptors(new ApiResponseInterceptor());
 
   // error dari class-validator biar konsisten { field : [ errorMessage ] }
   app.useGlobalPipes(AppValidationPipe);

@@ -1,11 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { CommonModule, EnvService } from '@app/common';
-import { DrizzleModule } from '@app/drizzle';
-import { RedisModule } from '@app/redis';
 import { ClsModule, ClsService } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 import { randomBytes } from 'crypto';
+
+import { CommonModule, EnvService } from '@app/common';
+import { DrizzleModule } from '@app/drizzle';
+import { AppController } from './app.controller';
+import { RedisModule } from '@app/redis';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 
