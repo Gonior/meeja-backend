@@ -37,7 +37,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionFilter());
 
   // success response biar konsisten
-  app.useGlobalInterceptors(new ResponseInterceptor(config));
+  app.useGlobalInterceptors(new ResponseInterceptor());
 
   // error dari class-validator biar konsisten { field : [ errorMessage ] }
   app.useGlobalPipes(AppValidationPipe);
